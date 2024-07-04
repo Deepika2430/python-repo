@@ -1,7 +1,6 @@
 import json
 
 def get_query_config(columns, selection_criteria, is_array, target_key, table):
-    # Construct the dictionary representing the JSON structure
     config_dict = {
         "columns": columns,
         "selection_criteria": {
@@ -12,10 +11,6 @@ def get_query_config(columns, selection_criteria, is_array, target_key, table):
         "target_key": target_key,
         "table": table
     }
-    
-    # Convert the dictionary to a JSON string
-    # json_string = json.dumps(config_dict, indent=4)  # Optional: indent for pretty printing
-    
     return config_dict
 
 
@@ -37,11 +32,6 @@ def get_json_response(columns, values):
    
     json_response = json.dumps(result, indent=4)
     return json_response
-
-# def get_formatted_response(columns, is_array, values):
-#     if is_array:
-#         response = zip(columns, values)
-#         return response
 
 def get_formatted_response(columns, values, is_array):
 
