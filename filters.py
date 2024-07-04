@@ -1,36 +1,11 @@
-# Executed filters using exec()
+from utils import get_db_query, get_formatted_response, add_attribute
+from db import get_db_response
 
-from jw_player_response import response
+def filter_pgdb(playlist_item, connection_string, query_config):
+    query = get_db_query(query_config)
+    response = get_db_response(query, connection_string)
+    json_response = get_formatted_response(query_config["columns"], response, query_config["is_array"])
+    print(json_response)
+    playlist_item = add_attribute(playlist_item, query_config["target_key"], json_response)
+    return playlist_item
 
-filter_repo = {
-    "filter_update_image_type" : {
-        "code" : '''def filter_update_image_type(playlist):
-        print("called")
-        images = playlist["images"]
-        type = images[0]["type"]
-        images = [{key: value for key, value in image.items() if key != 'type'} for image in images]
-        new_dictionary = {"type": type, "list": images}
-        playlist["images"] = new_dictionary
-        return playlist'''
-    },
-    "filter_watch_free": {
-        "code" : '''def filter_watch_free(playlist):
-        watch_free = False
-        if not playlist["requiresSubscription"]:
-            watch_free = True
-        playlist["watchFree"] = watch_free
-        return playlist'''
-    }
-}
-
-media = response["playlist"][0]
-
-for filter, filter_function in filter_repo.items():
-    exec(filter_function["code"])
-
-filter_functions = [filter_update_image_type, filter_watch_free]
-
-for counter in range(0, len(filter_functions)):
-    media = filter_functions[counter](media)
-
-print(media)
