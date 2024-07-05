@@ -22,17 +22,6 @@ def get_db_query(query_config):
     query = f"SELECT {columns} FROM {table_name} WHERE {table_selection_column} = '{item_selection_key}';"
     return query
 
-
-def get_json_response(columns, values):
-    result = {column: [] for column in columns}
-   
-    for record in values:
-        for column, value in zip(columns, record):
-            result[column] = (value)
-   
-    json_response = json.dumps(result, indent=4)
-    return json_response
-
 def get_formatted_response(columns, values, is_array):
 
     if not columns:
