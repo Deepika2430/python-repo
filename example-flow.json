@@ -1,0 +1,132 @@
+[
+    {
+        "id": "526d607ff81354aa",
+        "type": "tab",
+        "label": "Flow 4",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e51c6645daf36331",
+        "type": "build-db-query",
+        "z": "526d607ff81354aa",
+        "columns": "is_premium",
+        "itemSelectionKey": "xx123xx",
+        "tableSelectionColumn": "media_id",
+        "isArray": false,
+        "targetKey": "is_premium",
+        "table": "premium_assets",
+        "x": 320,
+        "y": 100,
+        "wires": [
+            [
+                "efa1c83fe587bebd"
+            ]
+        ]
+    },
+    {
+        "id": "efa1c83fe587bebd",
+        "type": "get_db_response",
+        "z": "526d607ff81354aa",
+        "name": "",
+        "x": 550,
+        "y": 100,
+        "wires": [
+            [
+                "ec2d07cdd7fee937"
+            ]
+        ]
+    },
+    {
+        "id": "2395c3cb2d7ce445",
+        "type": "debug",
+        "z": "526d607ff81354aa",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "d7e228eb526f3583",
+        "type": "inject",
+        "z": "526d607ff81354aa",
+        "name": "media id",
+        "props": [
+            {
+                "p": "mediaId",
+                "v": "n7tcab2D",
+                "vt": "str"
+            },
+            {
+                "p": "connectionString",
+                "v": "postgres://postgres:postgres@192.168.1.140:7000/dsp",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 100,
+        "y": 240,
+        "wires": [
+            [
+                "22cec6c884bd1e85"
+            ]
+        ]
+    },
+    {
+        "id": "22cec6c884bd1e85",
+        "type": "http request",
+        "z": "526d607ff81354aa",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://cdn.jwplayer.com/v2/media/{{mediaId}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 270,
+        "y": 340,
+        "wires": [
+            [
+                "e51c6645daf36331"
+            ]
+        ]
+    },
+    {
+        "id": "ec2d07cdd7fee937",
+        "type": "function",
+        "z": "526d607ff81354aa",
+        "name": "filter_is_premium",
+        "func": "let is_premium = msg.db_response[0].is_premium\n\nmsg.payload[\"playlist\"][0].is_premium = is_premium\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 220,
+        "wires": [
+            [
+                "2395c3cb2d7ce445"
+            ]
+        ]
+    }
+]
