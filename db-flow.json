@@ -8,54 +8,6 @@
         "env": []
     },
     {
-        "id": "e51c6645daf36331",
-        "type": "build-db-query",
-        "z": "526d607ff81354aa",
-        "columns": "is_premium",
-        "itemSelectionKey": "xx123xx",
-        "tableSelectionColumn": "media_id",
-        "isArray": false,
-        "targetKey": "is_premium",
-        "table": "premium_assets",
-        "x": 320,
-        "y": 100,
-        "wires": [
-            [
-                "efa1c83fe587bebd"
-            ]
-        ]
-    },
-    {
-        "id": "efa1c83fe587bebd",
-        "type": "get_db_response",
-        "z": "526d607ff81354aa",
-        "name": "",
-        "x": 550,
-        "y": 100,
-        "wires": [
-            [
-                "ec2d07cdd7fee937"
-            ]
-        ]
-    },
-    {
-        "id": "2395c3cb2d7ce445",
-        "type": "debug",
-        "z": "526d607ff81354aa",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 720,
-        "y": 340,
-        "wires": []
-    },
-    {
         "id": "d7e228eb526f3583",
         "type": "inject",
         "z": "526d607ff81354aa",
@@ -78,7 +30,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 100,
-        "y": 240,
+        "y": 40,
         "wires": [
             [
                 "22cec6c884bd1e85"
@@ -101,8 +53,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 270,
-        "y": 340,
+        "x": 130,
+        "y": 120,
         "wires": [
             [
                 "e51c6645daf36331"
@@ -114,18 +66,135 @@
         "type": "function",
         "z": "526d607ff81354aa",
         "name": "filter_is_premium",
-        "func": "let is_premium = msg.db_response[0].is_premium\n\nmsg.payload[\"playlist\"][0].is_premium = is_premium\n\nreturn msg;",
+        "func": "console.log(msg.db_response)\nlet is_premium = msg.db_response[0].is_premium\nconsole.log(msg.payload.playlist)\nmsg.payload[\"playlist\"][0].is_premium = is_premium\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 670,
-        "y": 220,
+        "x": 650,
+        "y": 200,
         "wires": [
             [
-                "2395c3cb2d7ce445"
+                "72c1a3e1e4c57316"
+            ]
+        ]
+    },
+    {
+        "id": "55abad7f813e27be",
+        "type": "function",
+        "z": "526d607ff81354aa",
+        "name": "filter_ad_breaks",
+        "func": "var db_response = msg.db_response\nvar ad_breaks = db_response\nif (db_response.length < 1)\n{\n    ad_breaks = db_response[0]\n}\nconsole.log(msg.payload[\"playlist\"])\nconsole.log(msg.payload[\"playlist\"][0])\nmsg.payload[\"playlist\"][0].ad_breaks = ad_breaks\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 340,
+        "wires": [
+            [
+                "5dc4a4edd43afd55"
+            ]
+        ]
+    },
+    {
+        "id": "72c1a3e1e4c57316",
+        "type": "build-db-query",
+        "z": "526d607ff81354aa",
+        "name": "",
+        "columns": "start_frame, ad_duration, ad_type, ad_url",
+        "itemSelectionKey": "xx123xx",
+        "tableSelectionColumn": "media_id",
+        "table": "ad_breaks",
+        "x": 140,
+        "y": 340,
+        "wires": [
+            [
+                "3bf912aa061a8e7c"
+            ]
+        ]
+    },
+    {
+        "id": "3bf912aa061a8e7c",
+        "type": "get_db_response",
+        "z": "526d607ff81354aa",
+        "name": "",
+        "x": 390,
+        "y": 340,
+        "wires": [
+            [
+                "55abad7f813e27be"
+            ]
+        ]
+    },
+    {
+        "id": "e51c6645daf36331",
+        "type": "build-db-query",
+        "z": "526d607ff81354aa",
+        "name": "",
+        "columns": "is_premium, media_id",
+        "itemSelectionKey": "xx123xx",
+        "tableSelectionColumn": "media_id",
+        "table": "premium_assets",
+        "x": 140,
+        "y": 200,
+        "wires": [
+            [
+                "efa1c83fe587bebd"
+            ]
+        ]
+    },
+    {
+        "id": "efa1c83fe587bebd",
+        "type": "get_db_response",
+        "z": "526d607ff81354aa",
+        "name": "",
+        "x": 390,
+        "y": 200,
+        "wires": [
+            [
+                "ec2d07cdd7fee937"
+            ]
+        ]
+    },
+    {
+        "id": "1425a5fd8777e55f",
+        "type": "debug",
+        "z": "526d607ff81354aa",
+        "name": "Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "5dc4a4edd43afd55",
+        "type": "function",
+        "z": "526d607ff81354aa",
+        "name": "filter_variations",
+        "func": "delete msg.payload.playlist[0].variations\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 460,
+        "wires": [
+            [
+                "1425a5fd8777e55f"
             ]
         ]
     }
