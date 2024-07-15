@@ -194,15 +194,15 @@
       "code": 400
     }
     ```
-### 7. Get media feed by name
-- **Endpoint:** `feed/media/name=xxxx`
+### 7. Get media feed by id
+- **Endpoint:** `feed/media/id=xxxx`
 - **Method:** GET
 - **Description:** Retrieves given media feed's pipeline and configuration 
 - **Response:**
   - **Success**:
     ```json
     {
-      "name": "Name of the media feed",
+      "id": "id of the media feed",
       "pipeline":[
         // Pipeline configuration details
       ]
