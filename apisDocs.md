@@ -229,6 +229,7 @@
       // Pipeline configuration details
     ]
   }
+ ```
 - **Description:** Saves pipeline configuration details.
 - **Response:**      
   - **Success**:
